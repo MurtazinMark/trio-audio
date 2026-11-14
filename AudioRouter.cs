@@ -37,6 +37,8 @@ namespace Trio
 
     internal sealed class AudioRouter
     {
+        public const int MaxOutputs = 5;
+
         private readonly ManualResetEvent stop = new ManualResetEvent(false);
         private readonly string sourceId;
         private readonly OutputRoute[] routes;
@@ -57,10 +59,10 @@ namespace Trio
 
         public AudioRouter(string sourceId, OutputRoute[] routes)
         {
-            if (String.IsNullOrEmpty(sourceId) || routes.Length < 1 || routes.Length > 3 ||
+            if (String.IsNullOrEmpty(sourceId) || routes.Length < 1 || routes.Length > MaxOutputs ||
                 routes.Select(r => r.Id).Distinct(StringComparer.OrdinalIgnoreCase).Count() != routes.Length ||
                 routes.Any(r => String.Equals(r.Id, sourceId, StringComparison.OrdinalIgnoreCase)))
-                throw new ArgumentException("Выберите источник и до трёх разных выходов.");
+                throw new ArgumentException("Выберите источник и до " + MaxOutputs + " разных выходов.");
 
             this.sourceId = sourceId;
             this.routes = routes;

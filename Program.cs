@@ -20,7 +20,7 @@ using Path = System.IO.Path;
 
 [assembly: System.Reflection.AssemblyTitle("Трио — аудиовывод")]
 [assembly: System.Reflection.AssemblyProduct("Трио")]
-[assembly: System.Reflection.AssemblyVersion("1.2.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.3.0.0")]
 
 namespace Trio
 {
@@ -46,7 +46,7 @@ namespace Trio
         private static readonly Brush MeterOff = new SolidColorBrush(Color.FromRgb(49, 64, 71));
 
         public readonly Window Window;
-        private readonly OutputSlot[] slots = new OutputSlot[3];
+        private readonly OutputSlot[] slots = new OutputSlot[AudioRouter.MaxOutputs];
         private readonly Rectangle[] meter = new Rectangle[18];
         private readonly Button toggle, refresh, openSound;
         private readonly TextBlock runState, help, channelName, channelHint, installCable;
@@ -396,8 +396,8 @@ namespace Trio
         private static readonly string SettingsPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Trio", "settings.xml");
 
-        public readonly Endpoint[] Outputs = new Endpoint[3];
-        public readonly int[] Volumes = { 100, 100, 100 };
+        public readonly Endpoint[] Outputs = new Endpoint[AudioRouter.MaxOutputs];
+        public readonly int[] Volumes = Enumerable.Repeat(100, AudioRouter.MaxOutputs).ToArray();
 
         public static MixerSettings Read()
         {
